@@ -1,22 +1,31 @@
 const express = require("express");
 const router = express.Router();
 const path = require("path");
+const multer = require("multer");
 
-router.post("/uploads", async (req, res) => {
+const storage = multer.diskStorage({
+  destination: path.join(__dirname, "../uploads"),
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage });
+
+router.post("/uploads", upload.single("file"), async (req, res) => {
   try {
-    console.log(req);
     if (!req.file) {
       return res.status(400).json({
         success: false,
         message: "No file uploaded.",
       });
     }
-    return res.status(200).json({
+    res.json({
       success: true,
       message: "File uploaded successfully.",
       file: {
         filename: req.file.filename,
-        originalName: req.file.originalName,
+        originalName: req.file.originalname,
         size: req.file.size,
         path: `/uploads/${req.file.filename}`,
       },
