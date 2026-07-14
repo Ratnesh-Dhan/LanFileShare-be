@@ -6,8 +6,13 @@ const path = require("path");
 router.get("/download/:filename", async (req, res) => {
   try {
     const { filename } = req.params;
-    const filepath = path.join(__dirname, "../uploads", filename);
 
+    const filepath = path.join(
+      __dirname,
+      "../uploads",
+      filename.replace(".json", ""),
+    );
+    console.log(filepath);
     if (!fs.existsSync(filepath)) {
       return (
         res.status(404),
