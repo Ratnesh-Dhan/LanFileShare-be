@@ -4,11 +4,9 @@ const fs = require("fs");
 const path = require("path");
 
 const folder_path = path.join(__dirname, "../uploads");
-console.log(folder_path);
 router.get("/files", async (req, res) => {
   try {
     const files = fs.readdirSync(folder_path);
-    console.log(files);
     res.status(200).json({ files });
   } catch (err) {
     console.log(err);
